@@ -73,26 +73,15 @@ class Cards {
     this.card = this.createChildCard.bind(this);
   }
 
-  getData(api) {
-    return Axios(api)
-      .then(response => {
-
-      })
-      .catch(err => {
-
-      });
-  }
-
   createChildCard() {
     const childCard = document.createElement('div');
     const img = document.createElement('img');
-    const cardInfo = this.addCardInfo(data)
+    const cardInfo = this.addCardInfo(this.data)
 
     childCard.classList.add('card')
 
     childCard.appendChild(img);
     childCard.appendChild(cardInfo);
-
 
     return childCard
   }
@@ -125,10 +114,36 @@ class Cards {
     cardInfo.appendChild(following);
     cardInfo.appendChild(bio);
 
+    //assign elements value
+    data.forEach(el => {
+      name = el.name;
+      userName = el.login;
+      location = el.location;
+      gitHubAddress = el.html_url;
+      followers = el.followers;
+      following = el.following
+    })
+
     return cardInfo;
   }
 }
 
+
+const getData = (api) => {
+  
+  return Axios(api)
+    .then(response => {
+      this.parseData(response);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+}
+
+const parseData = (response) => {
+  return response.data
+}
 const cards = document.querySelector('.cards');
-const newCard = new Cards("asd");
+const data = getData('https://api.github.com/users/kiamco');
+const newCard = new Cards();
 cards.appendChild(newCard.createChildCard());
