@@ -3,6 +3,16 @@
            https://api.github.com/users/<your name>
 */
 
+
+// create request
+// axios.get('https://api.github.com/users/kiamco')
+//   .then(response => {
+//     console.log(response);
+//   })
+//   .catch(err => {
+//     console.log(err);
+//   })
+
 /* Step 2: Inspect and study the data coming back, this is YOUR 
    github info! You will need to understand the structure of this 
    data in order to use it to build your component function 
@@ -53,3 +63,65 @@ const followersArray = [];
   luishrd
   bigknell
 */
+
+
+class Cards {
+  constructor(data) {
+    this.data = data
+    this.cards = document.querySelector('.cards');
+  }
+
+  createChildCard() {
+    const childCard = document.createElement('div');
+    const img = document.createElement('img');
+    const cardInfo = addCardInfo()
+    this.cards.appendChild(childCard);
+    childCard.appendChild(img);
+    childCard.appendChild(cardInfo);
+
+
+    return childCard
+  }
+
+  addCardInfo(){
+  // <div class="card-info">
+  //   <h3 class="name">{users name}</h3>
+  //   <p class="username">{users user name}</p>
+  //   <p>Location: {users location}</p>
+  //   <p>Profile:  
+  //     <a href={address to users github page}>{address to users github page}</a>
+  //   </p>
+  //   <p>Followers: {users followers count}</p>
+  //   <p>Following: {users following count}</p>
+  //   <p>Bio: {users bio}</p>
+  // </div>
+
+  // create elements
+  const cardInfo = document.createElement('div');
+  const name = document.createElement('h3');
+  const userName = document.createElement('p');
+  const location = document.createElement('p');
+  const profile = document.createElement('p');
+  const gitHubAddress = document.createElement('a');
+  const followers = dodcument.createElement('p');
+  const following = document.createElement('p');
+  const bio = dodcument.createElement('p');
+
+  // add class
+  cardInfo.classList.add('card-info');
+  name.classList.add('name');
+  userName.classList.add('username');
+  
+  //append 
+  cardInfo.appendChild(name);
+  cardInfo.appendChild(userName);
+  cardInfo.appendChild(location);
+  cardInfo.appendChild(profile);
+  profile.appendChild(gitHubAddress);
+  cardInfo.appendChild(followers);
+  cardInfo.appendChild(following);
+  cardInfo.appendChild(bio);
+
+  return cardInfo;
+  }
+}
