@@ -1,5 +1,3 @@
-import Axios from "axios";
-
 /* Step 1: using axios, send a GET request to the following URL 
            (replacing the palceholder with your Github name):
            https://api.github.com/users/<your name>
@@ -36,7 +34,6 @@ import Axios from "axios";
           user, and adding that card to the DOM.
 */
 
-const followersArray = [];
 
 /* Step 3: Create a function that accepts a single object as its only argument,
           Using DOM methods and properties, create a component that will return the following DOM element:
@@ -68,82 +65,90 @@ const followersArray = [];
 
 
 class Cards {
-  constructor(data) {
-    this.data = data
-    this.card = this.createChildCard.bind(this);
-  }
+    constructor(data) {
+        this.data = data;
+        this.card = this.createChildCard.bind(this);
+    }
 
-  createChildCard() {
-    const childCard = document.createElement('div');
-    const img = document.createElement('img');
-    const cardInfo = this.addCardInfo(this.data)
+    createChildCard() {
+        // create
+        const childCard = document.createElement('div');
+        const img = document.createElement('img');
 
-    childCard.classList.add('card')
+        // add class
+        childCard.classList.add('card')
+            // append them  
+        childCard.appendChild(img);
+        childCard.appendChild(this.addCardInfo(this.data));
 
-    childCard.appendChild(img);
-    childCard.appendChild(cardInfo);
+        // assign value
+        img.src = this.data.avatar_url;
 
-    return childCard
-  }
+        return childCard
+    }
 
-  addCardInfo(data) {
+    addCardInfo(data) {
 
-    // create elements
-    const cardInfo = document.createElement('div');
-    const name = document.createElement('h3');
-    const userName = document.createElement('p');
-    const location = document.createElement('p');
-    const profile = document.createElement('p');
-    const gitHubAddress = document.createElement('a');
-    const followers = document.createElement('p');
-    const following = document.createElement('p');
-    const bio = document.createElement('p');
+        // create elements
+        const cardInfo = document.createElement('div');
+        const name = document.createElement('h3');
+        const userName = document.createElement('p');
+        const location = document.createElement('p');
+        const profile = document.createElement('p');
+        const gitHubAddress = document.createElement('a');
+        const followers = document.createElement('p');
+        const following = document.createElement('p');
+        const bio = document.createElement('p');
 
-    // add class
-    cardInfo.classList.add('card-info');
-    name.classList.add('name');
-    userName.classList.add('username');
+        // add class
+        cardInfo.classList.add('card-info');
+        name.classList.add('name');
+        userName.classList.add('username');
 
-    //append 
-    cardInfo.appendChild(name);
-    cardInfo.appendChild(userName);
-    cardInfo.appendChild(location);
-    cardInfo.appendChild(profile);
-    profile.appendChild(gitHubAddress);
-    cardInfo.appendChild(followers);
-    cardInfo.appendChild(following);
-    cardInfo.appendChild(bio);
+        //append 
+        cardInfo.appendChild(name);
+        cardInfo.appendChild(userName);
+        cardInfo.appendChild(location);
+        cardInfo.appendChild(profile);
+        profile.appendChild(gitHubAddress);
+        cardInfo.appendChild(followers);
+        cardInfo.appendChild(following);
+        cardInfo.appendChild(bio);
 
-    //assign elements value
-    data.forEach(el => {
-      name = el.name;
-      userName = el.login;
-      location = el.location;
-      gitHubAddress = el.html_url;
-      followers = el.followers;
-      following = el.following
-    })
+        // assign
+        name.textContent = `Name: ${this.data.name}`;
+        userName.textContent = `Handle: ${this.data.login}`;
+        location.textContent = this.data.location === null ? `Location: unknown` : `Location: ${this.data.location}`;
+        gitHubAddress.textContent = `Github: ${this.data.html_url}`;
+        followers.textContent = `Followers: ${this.data.followers}`;
+        following.textContent = `Following: ${this.data.following}`;
 
-    return cardInfo;
-  }
+        return cardInfo;
+    }
 }
-
 
 const getData = (api) => {
-  
-  return Axios(api)
-    .then(response => {
-      this.parseData(response);
-    })
-    .catch(err => {
-      console.log(err);
-    });
+    axios.get(api)
+        .then(response => {
+            console.log(`Success: ${response}`)
+            const cards = document.querySelector('.cards');
+            const newCard = new Cards(response.data);
+            cards.appendChild(newCard.createChildCard());
+            console.log(response.data)
+        })
+        .catch(err => {
+            console.log(err);
+        })
 }
 
-const parseData = (response) => {
-  return response.data
-}
-const cards = document.querySelector('.cards');
-const data = getData('https://api.github.com/users/kiamco');
-const newCard = new Cards();
-cards.appendChild(newCard.createChildCard());
+const followersArray = ["tetondan",
+    "dustinmyers",
+    "justsml",
+    "luishrd",
+    "bigknell",
+    "kiamco"
+];
+
+
+
+followersArray.forEach(el => getData(`https://api.github.com/users/${el}`));
